@@ -33,6 +33,10 @@
     label: function () {
       return this.name || "olarm";
     },
+    credentials: {
+      token: { type: "text" },
+      deviceId: { type: "text" },
+    },
   });
 </script>
 
@@ -41,7 +45,14 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name" />
   </div>
-  <div class="form-tips"><b>Tip:</b> This is here to help.</div>
+  <div class="form-row">
+    <label for="node-input-token"><i class="fa fa-tag"></i> API Token</label>
+    <input type="text" id="node-input-token" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-deviceId"><i class="fa fa-tag"></i> Device ID</label>
+    <input type="text" id="node-input-deviceId" />
+  </div>
 </script>
 
 <script type="text/html" data-help-name="olarm">
