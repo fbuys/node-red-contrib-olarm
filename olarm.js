@@ -18,19 +18,33 @@ module.exports = function (RED) {
 
     const Olarm = require("./lib/olarm.js");
     node.olarm = new Olarm(token, deviceId);
+    node.olarm.status().then(updateStatus);
 
-    this.on("input", function (msg, send, done) {
-      // do something with 'msg'
-      const status = node.olarm.status();
+    this.on("input", async function (msg, send, done) {
+      // DUP-2: if very similar to unbypass if
+      if (msg?.topic === "zone-bypass") {
+        // msg = {payload: '1,2', topic: 'bypass'}
+        const zonesString = msg?.payload || "";
+        const bypassZonesResult = await node.olarm.bypassZones(
+          zonesString.split(","),
+        );
+      }
+      // DUP-2: if very similar to bypass if
+      if (msg?.topic === "zone-unbypass") {
+        // msg = {payload: '1,2', topic: 'unbypass'}
+        const zonesString = msg?.payload || "";
+        const bypassZonesResult = await node.olarm.unbypassZones(
+          zonesString.split(","),
+        );
+      }
+
+      const status = await node.olarm.status();
       send(status);
       updateStatus(status);
-
       // Once finished, call 'done'.
       // This call is wrapped in a check that 'done' exists
       // so the node will work in earlier versions of Node-RED (<1.0)
-      if (done) {
-        done();
-      }
+      if (done) done();
     });
 
     this.on("close", function () {
