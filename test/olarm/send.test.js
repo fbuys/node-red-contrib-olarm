@@ -33,6 +33,9 @@ describe("olarm.send", () => {
 
     expect(n.send).toHaveBeenCalledTimes(1);
     expect(n.send.mock.calls[0][0]).toEqual({
+      areas: [
+        { label: "Area 01", state: "disarm" },
+      ],
       deviceId: "deviceId",
       deviceName: "name",
       deviceStatus: "online",

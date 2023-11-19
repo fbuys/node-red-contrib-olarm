@@ -21,6 +21,19 @@ module.exports = function (RED) {
     node.olarm.status().then(updateStatus);
 
     this.on("input", async function (msg, send, done) {
+      // Arm actions
+      // TODO: Refactor global const for validArmTypes
+      const validArmTypes = ["area-disarm", "area-stay", "area-sleep", "area-arm"];
+      if (validArmTypes.includes(msg?.topic)) {
+        // msg = {payload: '1,2', topic: 'area-arm'}
+        const areasString = msg?.payload || "";
+        const armAreasResult = await node.olarm.armAreas(
+          msg.topic,
+          areasString.split(","),
+        );
+      }
+
+      // Bypass actions
       // DUP-2: if very similar to unbypass if
       if (msg?.topic === "zone-bypass") {
         // msg = {payload: '1,2', topic: 'bypass'}
