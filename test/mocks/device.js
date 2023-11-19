@@ -1,10 +1,26 @@
 let mockDevice = {};
 
-function bypassZone(zoneNumber) {
-  if (mockDevice.deviceState.zones[zoneNumber - 1] !== "b") {
-    mockDevice.deviceState.zones[zoneNumber - 1] = "b";
+function action(actionCmd, actionNum) {
+  const validBypassTypes = ["zone-bypass", "zone-unbypass"];
+  if (validBypassTypes.includes(actionCmd)) {
+    bypassZone(actionNum);
+  }
+  const validArmTypes = ["area-disarm", "area-stay", "area-sleep", "area-arm"];
+  if (validArmTypes.includes(actionCmd)) {
+    armArea(actionCmd, actionNum);
+  }
+}
+
+function armArea(armType, areaNum) {
+  const state = armType.split("-")[1];
+  mockDevice.deviceState.areas[areaNum - 1] = state;
+}
+
+function bypassZone(zoneNum) {
+  if (mockDevice.deviceState.zones[zoneNum - 1] !== "b") {
+    mockDevice.deviceState.zones[zoneNum - 1] = "b";
   } else {
-    mockDevice.deviceState.zones[zoneNumber - 1] = "c";
+    mockDevice.deviceState.zones[zoneNum - 1] = "c";
   }
 }
 
@@ -74,7 +90,7 @@ function reset() {
     deviceProfile: {
       ver: 1,
       areasLimit: 2,
-      areasLabels: ["label", ""],
+      areasLabels: ["Area 01", ""],
       zonesLimit: 16,
       zonesLabels: [
         "Zone 01",
@@ -198,7 +214,9 @@ function reset() {
 }
 
 module.exports = {
-  bypassZone,
+  action,
   device,
   reset,
+  bypassZone,
+  armArea,
 };

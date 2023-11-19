@@ -13,9 +13,7 @@ const handlers = [
     async ({ request }) => {
       const action = await request.json();
 
-      if (action.actionCmd === "zone-bypass") {
-        mockDevice.bypassZone(action.actionNum);
-      }
+      mockDevice.action(action.actionCmd, action.actionNum)
 
       return HttpResponse.json({
         actionId: crypto.randomUUID(),

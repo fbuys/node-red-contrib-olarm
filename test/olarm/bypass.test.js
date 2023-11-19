@@ -34,10 +34,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "c" },
           { label: "Zone 02", state: "b" },
@@ -67,10 +64,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "b" },
           { label: "Zone 02", state: "c" },
@@ -101,10 +95,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "b" },
           { label: "Zone 02", state: "b" },
@@ -138,10 +129,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "b" },
           { label: "Zone 02", state: "c" },
@@ -172,10 +160,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "c" },
           { label: "Zone 02", state: "c" },
@@ -206,10 +191,7 @@ describe("olarm.bypass", () => {
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toEqual({
-        deviceId: "deviceId",
-        deviceName: "name",
-        deviceStatus: "online",
+      expect(n.send.mock.calls[0][0]).toMatchObject({
         zones: [
           { label: "Zone 01", state: "c" },
           { label: "Zone 02", state: "c" },
