@@ -30,7 +30,7 @@ describe("olarm.bypass", () => {
       const n = await getNode("olarm1");
       n.send = vi.fn();
 
-      n.receive({ payload: "2,3", topic: "zone-bypass" });
+      n.receive({ payload: { "zone-bypass": "2,3" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
@@ -60,7 +60,7 @@ describe("olarm.bypass", () => {
       const n = await getNode("olarm1");
       n.send = vi.fn();
 
-      n.receive({ payload: "1,1", topic: "zone-bypass" });
+      n.receive({ payload: { "zone-bypass": "1,1" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
@@ -91,7 +91,7 @@ describe("olarm.bypass", () => {
       n.send = vi.fn();
 
       mockDevice.bypassZone("1");
-      n.receive({ payload: "1, 2", topic: "zone-bypass" });
+      n.receive({ payload: { "zone-bypass": "1,2" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
@@ -125,7 +125,7 @@ describe("olarm.bypass", () => {
 
       mockDevice.bypassZone("1");
       mockDevice.bypassZone("2");
-      n.receive({ payload: "2,3", topic: "zone-unbypass" });
+      n.receive({ payload: { "zone-unbypass": "2,3" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
@@ -156,7 +156,7 @@ describe("olarm.bypass", () => {
       n.send = vi.fn();
 
       mockDevice.bypassZone("1");
-      n.receive({ payload: "1,1", topic: "zone-unbypass" });
+      n.receive({ payload: { "zone-unbypass": "1,1" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
@@ -187,7 +187,7 @@ describe("olarm.bypass", () => {
       n.send = vi.fn();
 
       mockDevice.bypassZone("1");
-      n.receive({ payload: "1, 2", topic: "zone-unbypass" });
+      n.receive({ payload: { "zone-unbypass": "1,2" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
