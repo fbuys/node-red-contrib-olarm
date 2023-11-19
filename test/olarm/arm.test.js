@@ -26,60 +26,52 @@ describe("olarm.arm", () => {
   afterEach(testTeardown);
 
   describe("when arming", () => {
-    it("arms the specific area", async () => {
+    it.each([["area-arm"], ["area-stay"], ["area-sleep"], ["area-disarm"]])(
+      "%s the specific area",
+      async (action) => {
+        const n = await getNode("olarm1");
+        n.send = vi.fn();
+
+        n.receive({ payload: { [action]: "1" } });
+        await Utils.delay(10);
+
+        expect(n.send).toHaveBeenCalledTimes(1);
+        expect(n.send.mock.calls[0][0]).toMatchObject({
+          areas: [{ label: "Area 01", state: action.split("-")[1] }],
+        });
+      },
+    );
+  });
+
+  describe("when arming and bypassing", () => {
+    it("works", async () => {
       const n = await getNode("olarm1");
       n.send = vi.fn();
 
-      n.receive({ payload: "1", topic: "area-arm" });
+      n.receive({ payload: { "area-arm": "1", "zone-bypass": "2,3" } });
       await Utils.delay(10);
 
       expect(n.send).toHaveBeenCalledTimes(1);
       expect(n.send.mock.calls[0][0]).toMatchObject({
         areas: [{ label: "Area 01", state: "arm" }],
-      });
-    });
-
-    it("stay-arms the specific area", async () => {
-      const n = await getNode("olarm1");
-      n.send = vi.fn();
-
-      n.receive({ payload: "1", topic: "area-stay" });
-      await Utils.delay(10);
-
-      expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toMatchObject({
-        areas: [{ label: "Area 01", state: "stay" }],
-      });
-    });
-
-    it("sleep-arms the specific area", async () => {
-      const n = await getNode("olarm1");
-      n.send = vi.fn();
-
-      n.receive({ payload: "1", topic: "area-sleep" });
-      await Utils.delay(10);
-
-      expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toMatchObject({
-        areas: [{ label: "Area 01", state: "sleep" }],
-      });
-    });
-  });
-
-  describe("when arming", () => {
-    it("disarms the specific area", async () => {
-      const n = await getNode("olarm1");
-      n.send = vi.fn();
-
-      mockDevice.armArea("area-arm", "1");
-      expect(mockDevice.device().deviceState.areas[0]).toBe("arm");
-
-      n.receive({ payload: "1", topic: "area-disarm" });
-      await Utils.delay(10);
-
-      expect(n.send).toHaveBeenCalledTimes(1);
-      expect(n.send.mock.calls[0][0]).toMatchObject({
-        areas: [{ label: "Area 01", state: "disarm" }],
+        zones: [
+          { label: "Zone 01", state: "c" },
+          { label: "Zone 02", state: "b" },
+          { label: "Zone 03", state: "b" },
+          { label: "Zone 04", state: "c" },
+          { label: "Zone 05", state: "c" },
+          { label: "Zone 06", state: "c" },
+          { label: "Zone 07", state: "c" },
+          { label: "Zone 08", state: "c" },
+          { label: "Zone 09", state: "c" },
+          { label: "Zone 10", state: "c" },
+          { label: "Zone 11", state: "c" },
+          { label: "Zone 12", state: "c" },
+          { label: "Zone 13", state: "c" },
+          { label: "Zone 14", state: "c" },
+          { label: "Zone 15", state: "c" },
+          { label: "Zone 16", state: "c" },
+        ],
       });
     });
   });

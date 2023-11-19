@@ -21,34 +21,22 @@ module.exports = function (RED) {
     node.olarm.status().then(updateStatus);
 
     this.on("input", async function (msg, send, done) {
-      // Arm actions
-      // TODO: Refactor global const for validArmTypes
-      const validArmTypes = ["area-disarm", "area-stay", "area-sleep", "area-arm"];
-      if (validArmTypes.includes(msg?.topic)) {
-        // msg = {payload: '1,2', topic: 'area-arm'}
-        const areasString = msg?.payload || "";
-        const armAreasResult = await node.olarm.armAreas(
-          msg.topic,
-          areasString.split(","),
-        );
-      }
-
-      // Bypass actions
-      // DUP-2: if very similar to unbypass if
-      if (msg?.topic === "zone-bypass") {
-        // msg = {payload: '1,2', topic: 'bypass'}
-        const zonesString = msg?.payload || "";
-        const bypassZonesResult = await node.olarm.bypassZones(
-          zonesString.split(","),
-        );
-      }
-      // DUP-2: if very similar to bypass if
-      if (msg?.topic === "zone-unbypass") {
-        // msg = {payload: '1,2', topic: 'unbypass'}
-        const zonesString = msg?.payload || "";
-        const bypassZonesResult = await node.olarm.unbypassZones(
-          zonesString.split(","),
-        );
+      if (msg?.payload && typeof msg.payload === "object") {
+        // Actions are performed in below order
+        const validActions = [
+          "zone-bypass",
+          "zone-unbypass",
+          "area-arm",
+          "area-stay",
+          "area-sleep",
+          "area-disarm",
+        ];
+        const { payload } = msg;
+        for (const action of validActions) {
+          if (payload[action]) {
+            await node.olarm.perform(action, payload[action]);
+          }
+        }
       }
 
       const status = await node.olarm.status();
